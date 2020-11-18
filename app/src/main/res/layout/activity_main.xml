@@ -51,5 +51,28 @@
         android:textColor="@color/TextColor" />
 
 
+    <Button
+        android:text="@string/addtodo"
+        android:id="@+id/btnPlus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:scaleType="centerCrop"/>
+
+
+    <ScrollView
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="10"
+        android:fillViewport="false">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </ScrollView>
+
 
 </LinearLayout>

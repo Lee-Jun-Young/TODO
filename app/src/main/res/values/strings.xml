@@ -2,5 +2,11 @@
     <string name="app_name">TODO</string>
     <string name="settings">settings</string>
     <string name="addtodo">+ 할 일 추가</string>
+    <string name="close">닫기</string>
+    <string name="save">저장</string>
+    <string name="todo">할 일</string>
+    <string name="hinttodo">추가할 할 일을 입력해 주세요.</string>
+    <string name="memo">메모</string>
+    <string name="hintmemo">추가할 메모를 입력해 주세요.</string>
     <string name="StringValue">이미지가 열리지 않습니다.</string>
 </resources>
