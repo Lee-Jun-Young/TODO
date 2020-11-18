@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_height="match_parent"
+    android:layout_marginStart="30sp"
+    android:layout_marginEnd="30sp"
+    tools:context=".AddtodoActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20sp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/close"
+            android:textColor="@color/TextColor"
+            android:textSize="15sp"
+            android:layout_weight="1"
+            android:id="@+id/tv_back"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/save"
+            android:textColor="@color/TextColor"
+            android:layout_weight="1"
+            android:textSize="15sp"
+            android:gravity="end"
+            android:id="@+id/tv_add"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="80sp"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:enabled="false"
+            android:singleLine="true"
+            android:textColor="@color/TextColor"
+            android:text="@string/todo"/>
+
+        <EditText
+            android:id="@+id/et_addtodo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:hint="@string/hinttodo"
+            android:textColor="@color/HintColor"
+            android:singleLine="true" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:enabled="false"
+            android:singleLine="true"
+            android:textColor="@color/TextColor"
+            android:text="@string/memo"/>
+
+        <EditText
+            android:id="@+id/et_addmemo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:hint="@string/hintmemo"
+            android:textColor="@color/HintColor"
+            android:singleLine="true" />
+
+
+
+
+
+    </LinearLayout>
+
+</LinearLayout>
