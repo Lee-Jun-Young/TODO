@@ -15,6 +15,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
+
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -42,23 +43,20 @@
 
     </LinearLayout>
 
-    <Button
+    <EditText
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:id="@+id/btn_addTodo"
-        android:layout_marginTop="20dp"
-        android:text="@string/addtodo"
-        android:textColor="@color/TextColor" />
-
+        android:id="@+id/et_addTodo"
+        android:layout_marginTop="20sp"
+        android:hint="@string/addtodo"
+        android:inputType="text"
+        android:imeOptions="actionDone" />
 
     <Button
-        android:text="@string/addtodo"
-        android:id="@+id/btnPlus"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:scaleType="centerCrop"/>
-
+        android:text="@string/save"
+        android:id="@+id/btn_add"/>
 
     <ScrollView
         android:layout_marginStart="10dp"
