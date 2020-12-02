@@ -2,10 +2,12 @@ package com.example.todo;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Paint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -59,6 +61,14 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
             notifyItemRangeChanged(position1, todoList.size());
         });
 
+        holder.todo_check.setOnClickListener(v -> {
+            if (holder.todo_check.isChecked()) {
+                holder.tv_todo.setPaintFlags(holder.tv_todo.getPaintFlags()| Paint.STRIKE_THRU_TEXT_FLAG);
+            }
+            else {
+                holder.tv_todo.setPaintFlags(0);
+            }
+        });
 
     }
 
@@ -71,12 +81,14 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
 
         TextView tv_todo;
         ImageView iv_delete;
+        CheckBox todo_check;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
             tv_todo = itemView.findViewById(R.id.tv_todo);
             iv_delete = itemView.findViewById(R.id.iv_delete);
+            todo_check = itemView.findViewById(R.id.todo_check);
         }
     }
 }

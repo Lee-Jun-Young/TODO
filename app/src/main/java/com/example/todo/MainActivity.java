@@ -1,34 +1,20 @@
 package com.example.todo;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.Observer;
-import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.room.Room;
-
+import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.RectF;
-import android.icu.util.EthiopicCalendar;
+import android.media.Image;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.KeyEvent;
+import android.provider.SettingsSlicesContract;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
-import android.widget.Button;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.TextView.OnEditorActionListener;
 import android.widget.Toast;
-
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -37,14 +23,14 @@ import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
 
-    TextView tv_today;
-    EditText et_addTodo;
-    Button btn_add;
-    List<TodoList> todoList = new ArrayList<>();
-    LinearLayoutManager linearLayoutManager;
-    TodoDatabase database;
-    RecyclerAdapter adapter;
-    RecyclerView recyclerView;
+    private TextView tv_today;
+    private EditText et_addTodo;
+    private ImageView iv_settins;
+    private List<TodoList> todoList = new ArrayList<>();
+    private LinearLayoutManager linearLayoutManager;
+    private TodoDatabase database;
+    private RecyclerAdapter adapter;
+    private RecyclerView recyclerView;
 
     SimpleDateFormat dateFormat = new SimpleDateFormat("MMM d, yyyy", Locale.US);
 
@@ -52,10 +38,11 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        InputMethodManager inputMethodManager = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
         recyclerView = findViewById(R.id.rv_view);
         et_addTodo = findViewById(R.id.et_addTodo);
         tv_today = findViewById(R.id.tv_today);
-        btn_add = findViewById(R.id.btn_add);
+        iv_settins = findViewById(R.id.iv_settins);
 
         Date date = new Date();
         String time = dateFormat.format(date);
@@ -72,21 +59,47 @@ public class MainActivity extends AppCompatActivity {
 
         recyclerView.setAdapter(adapter);
 
-        btn_add.setOnClickListener(view -> {
-            String str = et_addTodo.getText().toString().trim();
-
-            if(!str.equals("")){
-                TodoList data = new TodoList();
-                data.setTodo_content(str);
-                database.todoDao().insert(data);
-                et_addTodo.setText("");
-
-                todoList.clear();
-                todoList.addAll(database.todoDao().getAll());
-                adapter.notifyDataSetChanged();
-
-            }
+        iv_settins.setOnClickListener(view -> {
+            Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
+            startActivity(intent);
         });
 
+        et_addTodo.setOnEditorActionListener((textView, i, keyEvent) -> {
+                 String str = et_addTodo.getText().toString().trim();
+
+                 if (str.isEmpty()) {
+
+                     Toast.makeText(getApplicationContext(), "할 일을 입력해주세요", Toast.LENGTH_SHORT).show();
+                     textView.clearFocus();
+                     textView.setFocusable(false);
+                     textView.setFocusableInTouchMode(true);
+                     textView.setFocusable(true);
+
+                     assert inputMethodManager != null;
+                     inputMethodManager.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY,0);
+
+                     return true;
+                 }
+
+                if (i == EditorInfo.IME_ACTION_DONE) {
+                    if (!str.equals(" ")) {
+                        TodoList data = new TodoList();
+                        data.setTodo_content(str);
+                        database.todoDao().insert(data);
+                        et_addTodo.setText("");
+
+                        todoList.clear();
+                        todoList.addAll(database.todoDao().getAll());
+                        adapter.notifyDataSetChanged();
+                        textView.setFocusable(false);
+                        textView.setFocusableInTouchMode(true);
+                        textView.setFocusable(true);
+
+                        assert inputMethodManager != null;
+                        inputMethodManager.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
+                    }
+                }
+                 return true;
+             });
     }
 }
