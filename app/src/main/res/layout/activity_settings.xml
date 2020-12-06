@@ -18,7 +18,7 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:src="@drawable/ic_keyboard_arrow_left"
+            android:src="@drawable/ic_baseline_keyboard_arrow_left"
             android:contentDescription="@string/StringValue"
             android:id="@+id/iv_before"/>
 
@@ -61,7 +61,7 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_keyboard_arrow_right"
+            android:src="@drawable/ic_baseline_keyboard_arrow_right"
             android:contentDescription="@string/StringValue"
             android:layout_weight="1" />
 
@@ -92,7 +92,7 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_keyboard_arrow_right"
+            android:src="@drawable/ic_baseline_keyboard_arrow_right"
             android:contentDescription="@string/StringValue"
             android:layout_weight="1" />
     </LinearLayout>
@@ -122,7 +122,7 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_keyboard_arrow_right"
+            android:src="@drawable/ic_baseline_keyboard_arrow_right"
             android:contentDescription="@string/StringValue"
             android:layout_weight="1" />
     </LinearLayout>
@@ -164,7 +164,7 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_keyboard_arrow_right"
+            android:src="@drawable/ic_baseline_keyboard_arrow_right"
             android:contentDescription="@string/StringValue"
             android:layout_weight="1" />
 
@@ -196,7 +196,7 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_keyboard_arrow_right"
+            android:src="@drawable/ic_baseline_keyboard_arrow_right"
             android:contentDescription="@string/StringValue"
             android:layout_weight="1" />
 

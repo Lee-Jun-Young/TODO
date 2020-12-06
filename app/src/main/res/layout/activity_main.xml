@@ -24,16 +24,6 @@
             android:textColor="@color/TextColor"
             android:id="@+id/tv_today"/>
 
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_todolists"
-            android:contentDescription="@string/StringValue"
-            android:layout_marginEnd="15sp"
-            android:layout_gravity="center_vertical"
-            android:id="@+id/iv_todoLists"/>
-
         <ImageView
             android:id="@+id/iv_settins"
             android:layout_width="wrap_content"

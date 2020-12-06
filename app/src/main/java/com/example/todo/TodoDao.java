@@ -17,8 +17,8 @@ public interface TodoDao {
     @Insert(onConflict = REPLACE)
     void insert(TodoList todoList);
 
-    @Update
-    void update(TodoList todoList);
+    @Query("UPDATE todoList SET todo_content = :uText WHERE id = :uID")
+    void update(int uID, String uText);
 
     @Delete
     void delete(TodoList todoList);
