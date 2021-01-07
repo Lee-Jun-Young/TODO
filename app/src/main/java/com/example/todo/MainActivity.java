@@ -1,19 +1,31 @@
 package com.example.todo;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Canvas;
+import android.os.Build;
 import android.os.Bundle;
+import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import org.w3c.dom.Text;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -57,7 +69,65 @@ public class MainActivity extends AppCompatActivity {
         adapter = new RecyclerAdapter(todoList);
 
         recyclerView.setAdapter(adapter);
-        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new RecyclerItemTouchHelper(adapter));
+
+        ItemTouchHelper.SimpleCallback simpleItemTouchCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+            @Override
+            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+                final int position = viewHolder.getAdapterPosition();
+                TodoList d = todoList.get(position);
+                if(direction == ItemTouchHelper.RIGHT) {
+                    int uID = d.getId();
+
+                    String Text = d.getTodo_content();
+
+                    Dialog dialog = new Dialog(MainActivity.this);
+                    dialog.setContentView(R.layout.dialog_update);
+
+                    dialog.show();
+                    dialog.setCancelable(false);
+                    EditText et_editText = dialog.findViewById(R.id.et_editText);
+                    Button btn_udpate = dialog.findViewById(R.id.btn_update);
+                    Button btn_cancel = dialog.findViewById(R.id.btn_cancel);
+                    et_editText.setText(Text);
+
+                    btn_udpate.setOnClickListener(view -> {
+                        dialog.dismiss();
+                        String uText = et_editText.getText().toString().trim();
+
+                        database.todoDao().update(uID,uText);
+
+                        todoList.clear();
+                        todoList.addAll(database.todoDao().getAll());
+                        adapter.notifyItemRemoved(position);
+                        adapter.notifyItemRangeChanged(position, todoList.size());
+                    });
+
+                    btn_cancel.setOnClickListener(view -> {
+                        dialog.dismiss();
+                        todoList.clear();
+                        todoList.addAll(database.todoDao().getAll());
+                        adapter.notifyItemRemoved(position);
+                        adapter.notifyItemRangeChanged(position, todoList.size());
+                    });
+                }
+
+                else{
+                    database.todoDao().delete(d);
+
+                    todoList.remove(position);
+                    adapter.notifyItemRemoved(position);
+                    adapter.notifyItemRangeChanged(position, todoList.size());
+                }
+            }
+        };
+
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
         itemTouchHelper.attachToRecyclerView(recyclerView);
 
         iv_settins.setOnClickListener(view -> {
@@ -69,7 +139,6 @@ public class MainActivity extends AppCompatActivity {
                  String str = et_addTodo.getText().toString().trim();
 
                  if (str.isEmpty()) {
-
                      Toast.makeText(getApplicationContext(), "할 일을 입력해주세요", Toast.LENGTH_SHORT).show();
                      textView.clearFocus();
                      textView.setFocusable(false);

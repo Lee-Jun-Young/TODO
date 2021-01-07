@@ -5,17 +5,67 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:gravity="center"
+        android:textColor="#ffffff"
+        android:textSize="16sp"
+        android:text="@string/update_title"
+        android:background="@color/colorPrimaryDark"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#000000"/>
+
     <EditText
+        android:id="@+id/et_editText"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="text"
-        android:hint="@string/todo"
-        android:id="@+id/et_editText"/>
-
-    <Button
+        android:layout_height="70sp"
+        android:gravity="center"
+        android:textColor="#000000"
+        android:textSize="16sp" />
+    <View
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/btn_update"
-        android:text="@string/update"/>
+        android:layout_height="1dp"
+        android:background="#000000"/>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btn_update"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/update"
+            android:textColor="#000000"
+            android:textSize="16sp"
+            android:background="#ffffff"/>
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="#000000" />
+
+        <Button
+            android:id="@+id/btn_cancel"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/cancel"
+            android:textColor="#000000"
+            android:textSize="16sp"
+            android:background="#ffffff"/>
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#000000"/>
 </LinearLayout>
