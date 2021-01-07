@@ -6,6 +6,7 @@
     <string name="close">닫기</string>
     <string name="save">저장</string>
     <string name="todo">할 일</string>
+    <string name="TODO">TODO.</string>
     <string name="update">수정</string>
     <string name="hinttodo">추가할 할 일을 입력해 주세요.</string>
     <string name="StringValue">이미지가 존재하지 않습니다.</string>

@@ -10,12 +10,14 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.RoomDatabase;
 
@@ -27,13 +29,16 @@ import java.util.List;
 public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHolder>{
 
     private List<TodoList> todoList;
-    private Activity context;
+    private Activity activity;
     private TodoDatabase database;
 
-    public RecyclerAdapter(Activity context, List<TodoList> todoList){
-        this.context = context;
+    public RecyclerAdapter(List<TodoList> todoList){
         this.todoList = todoList;
         notifyDataSetChanged();
+    }
+
+    public Context getContext(){
+        return activity;
     }
 
     @NonNull
@@ -45,17 +50,11 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
         return new ViewHolder(view);
     }
 
-    public interface ItemTouchHelperListener {
-        boolean onItemMove(int form_position, int to_position);
-        void onItemSwipe(int position);
-    }
-
-
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         TodoList data = todoList.get(position);
 
-        database = TodoDatabase.getInstance(context);
+        database = TodoDatabase.getInstance(getContext());
 
         holder.tv_todo.setText(data.getTodo_content());
 
@@ -64,7 +63,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
             int uID = d.getId();
             String Text = d.getTodo_content();
 
-            Dialog dialog = new Dialog(context);
+            Dialog dialog = new Dialog(getContext());
 
             dialog.setContentView(R.layout.dialog_update);
 
@@ -94,6 +93,17 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
             });
         });
 
+        ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT | ItemTouchHelper.LEFT) {
+            @Override
+            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+            }
+        };
+
         holder.iv_delete.setOnClickListener(view -> {
             TodoList d = todoList.get(holder.getAdapterPosition());
             database.todoDao().delete(d);
@@ -104,7 +114,10 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
             notifyItemRangeChanged(position1, todoList.size());
         });
 
-        holder.todo_check.setOnClickListener(view -> {
+
+        holder.todo_check.setOnCheckedChangeListener(null);
+
+        holder.todo_check.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (holder.todo_check.isChecked()) {
                 holder.tv_todo.setPaintFlags(holder.tv_todo.getPaintFlags()| Paint.STRIKE_THRU_TEXT_FLAG);
             }
@@ -112,6 +125,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
                 holder.tv_todo.setPaintFlags(0);
             }
         });
+
     }
 
     @Override
