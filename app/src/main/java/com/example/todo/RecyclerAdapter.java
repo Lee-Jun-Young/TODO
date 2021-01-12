@@ -2,6 +2,7 @@ package com.example.todo;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.ClipData;
 import android.content.Context;
 import android.graphics.Paint;
 import android.view.LayoutInflater;
@@ -13,6 +14,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,10 +43,22 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
         return context;
     }
 
+    public class ViewHolder extends RecyclerView.ViewHolder {
+
+        TextView tv_todo;
+        CheckBox todo_check;
+
+        public ViewHolder(@NonNull View itemView) {
+            super(itemView);
+
+            tv_todo = itemView.findViewById(R.id.tv_todo);
+            todo_check = itemView.findViewById(R.id.todo_check);
+        }
+    }
+
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.rv_item,parent,false);
         return new ViewHolder(view);
@@ -52,19 +66,29 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        TodoList data = todoList.get(position);
+        final TodoList data = todoList.get(position);
         database = TodoDatabase.getInstance(getContext());
         holder.tv_todo.setText(data.getTodo_content());
-        holder.todo_check.setOnCheckedChangeListener(null);
 
-        holder.todo_check.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (holder.todo_check.isChecked()) {
-                holder.tv_todo.setPaintFlags(holder.tv_todo.getPaintFlags()| Paint.STRIKE_THRU_TEXT_FLAG);
-            }
-            else {
-                holder.tv_todo.setPaintFlags(0);
+        holder.todo_check.setOnCheckedChangeListener(null);
+        holder.todo_check.setChecked(data.isSelected());
+
+        holder.todo_check.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener()
+        {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
+            {
+                if(isChecked) {
+                    holder.tv_todo.setPaintFlags(holder.tv_todo.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                    data.setSelected(true);
+                }
+                else {
+                    holder.todo_check.setPaintFlags(0);
+                    data.setSelected(false);
+                }
             }
         });
+
     }
 
     @Override
@@ -72,20 +96,4 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
         return todoList.size() ;
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
-
-        TextView tv_todo;
-        ImageView iv_delete;
-        ImageView iv_edit;
-        CheckBox todo_check;
-
-        public ViewHolder(@NonNull View itemView) {
-            super(itemView);
-
-            tv_todo = itemView.findViewById(R.id.tv_todo);
-            iv_delete = itemView.findViewById(R.id.iv_delete);
-            todo_check = itemView.findViewById(R.id.todo_check);
-            iv_edit = itemView.findViewById(R.id.iv_edit);
-        }
-    }
 }

@@ -1,6 +1,5 @@
 package com.example.todo;
 
-import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
@@ -17,6 +16,8 @@ public class TodoList implements Serializable {
     @ColumnInfo(name = "todo_content")
     private String todo_content;
 
+    @ColumnInfo(name = "isSelected", defaultValue = "false")
+    private boolean isSelected;
 
     public int getId() {
         return id;
@@ -33,4 +34,8 @@ public class TodoList implements Serializable {
     public void setTodo_content(String todo_content) {
         this.todo_content = todo_content;
     }
+
+    public boolean isSelected() { return isSelected; }
+
+    public void setSelected(boolean selected) { isSelected = selected; }
 }

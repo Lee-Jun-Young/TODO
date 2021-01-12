@@ -3,6 +3,7 @@ package com.example.todo;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -31,6 +32,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+
+import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator;
+
+import static androidx.recyclerview.widget.RecyclerView.*;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -72,13 +77,27 @@ public class MainActivity extends AppCompatActivity {
 
         ItemTouchHelper.SimpleCallback simpleItemTouchCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
             @Override
-            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull ViewHolder viewHolder, @NonNull ViewHolder target) {
                 return false;
+            }
+
+            @Override
+            public void onChildDraw(@NonNull Canvas c, @NonNull RecyclerView recyclerView, @NonNull  RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive){
+
+                new RecyclerViewSwipeDecorator.Builder(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
+                        .addSwipeLeftBackgroundColor(ContextCompat.getColor(MainActivity.this, R.color.colorAccent))
+                        .addSwipeLeftActionIcon(R.drawable.ic_delete)
+                        .addSwipeRightBackgroundColor(ContextCompat.getColor(MainActivity.this,R.color.colorPrimary))
+                        .addSwipeRightActionIcon(R.drawable.ic_baseline_edit)
+                        .create()
+                        .decorate();
+
+                super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
             }
 
             @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
             @Override
-            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+            public void onSwiped(@NonNull ViewHolder viewHolder, int direction) {
                 final int position = viewHolder.getAdapterPosition();
                 TodoList d = todoList.get(position);
                 if(direction == ItemTouchHelper.RIGHT) {
@@ -110,8 +129,6 @@ public class MainActivity extends AppCompatActivity {
 
                     btn_cancel.setOnClickListener(view -> {
                         dialog.dismiss();
-                        todoList.clear();
-                        todoList.addAll(database.todoDao().getAll());
                         adapter.notifyItemRemoved(position);
                         adapter.notifyItemRangeChanged(position, todoList.size());
                     });

@@ -26,5 +26,4 @@ public interface TodoDao {
     @Query("SELECT * FROM todoList")
     List<TodoList> getAll();
 
-
 }
