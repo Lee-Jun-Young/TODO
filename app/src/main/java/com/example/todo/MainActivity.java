@@ -60,6 +60,8 @@ public class MainActivity extends AppCompatActivity {
         tv_today = findViewById(R.id.tv_today);
         iv_settins = findViewById(R.id.iv_settins);
 
+        inputMethodManager.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
+
         Date date = new Date();
         String time = dateFormat.format(date);
         tv_today.setText(time);
@@ -100,6 +102,9 @@ public class MainActivity extends AppCompatActivity {
             public void onSwiped(@NonNull ViewHolder viewHolder, int direction) {
                 final int position = viewHolder.getAdapterPosition();
                 TodoList d = todoList.get(position);
+                /*
+                ItemTouchHelper.RIGHT, Todo update
+                 */
                 if(direction == ItemTouchHelper.RIGHT) {
                     int uID = d.getId();
 
@@ -110,14 +115,32 @@ public class MainActivity extends AppCompatActivity {
 
                     dialog.show();
                     dialog.setCancelable(false);
-                    EditText et_editText = dialog.findViewById(R.id.et_editText);
+                    EditText et_editTodo = dialog.findViewById(R.id.et_editTodo);
                     Button btn_udpate = dialog.findViewById(R.id.btn_update);
                     Button btn_cancel = dialog.findViewById(R.id.btn_cancel);
-                    et_editText.setText(Text);
+                    et_editTodo.setText(Text);
+
+                    et_editTodo.setOnEditorActionListener((textView, i, keyEvent) -> {
+                        if (i == EditorInfo.IME_ACTION_DONE) {
+                            dialog.dismiss();
+                            String uText = et_editTodo.getText().toString().trim();
+                            if (!uText.equals(" ")) {
+                                database.todoDao().update(uID,uText);
+
+                                todoList.clear();
+                                todoList.addAll(database.todoDao().getAll());
+                                adapter.notifyItemRemoved(position);
+                                adapter.notifyItemRangeChanged(position, todoList.size());
+
+                                inputMethodManager.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
+                            }
+                        }
+                        return true;
+                    });
 
                     btn_udpate.setOnClickListener(view -> {
                         dialog.dismiss();
-                        String uText = et_editText.getText().toString().trim();
+                        String uText = et_editTodo.getText().toString().trim();
 
                         database.todoDao().update(uID,uText);
 
@@ -125,15 +148,22 @@ public class MainActivity extends AppCompatActivity {
                         todoList.addAll(database.todoDao().getAll());
                         adapter.notifyItemRemoved(position);
                         adapter.notifyItemRangeChanged(position, todoList.size());
+
+                        inputMethodManager.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
                     });
 
                     btn_cancel.setOnClickListener(view -> {
                         dialog.dismiss();
                         adapter.notifyItemRemoved(position);
                         adapter.notifyItemRangeChanged(position, todoList.size());
-                    });
-                }
 
+                        inputMethodManager.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
+                    });
+
+                }
+                /*
+                ItemTouchHelper.LEFT, Todo delete
+                 */
                 else{
                     database.todoDao().delete(d);
 
@@ -162,7 +192,6 @@ public class MainActivity extends AppCompatActivity {
                      textView.setFocusableInTouchMode(true);
                      textView.setFocusable(true);
 
-                     assert inputMethodManager != null;
                      inputMethodManager.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY,0);
 
                      return true;
@@ -182,7 +211,6 @@ public class MainActivity extends AppCompatActivity {
                         textView.setFocusableInTouchMode(true);
                         textView.setFocusable(true);
 
-                        assert inputMethodManager != null;
                         inputMethodManager.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
                     }
                 }
